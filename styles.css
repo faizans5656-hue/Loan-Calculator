@@ -36,12 +36,15 @@ body {
     line-height: 1.6;
     padding: var(--spacing-md);
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .container {
     max-width: 600px;
     margin: 0 auto;
     padding: var(--spacing-lg) 0;
+    flex: 1;
 }
 
 /* Header Styles */
