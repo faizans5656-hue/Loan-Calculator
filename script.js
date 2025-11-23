@@ -353,6 +353,35 @@ function populateAmortizationTable(schedule) {
 // Global variable to store the chart instance
 let loanChartInstance = null;
 
+// Function to update chart on resize
+function updateChartOnResize() {
+    if (loanChartInstance) {
+        // Update font sizes based on screen width
+        const fontSize = window.innerWidth < 768 ? 10 : 12;
+        
+        // Update x-axis title and ticks
+        loanChartInstance.options.scales.x.title.font.size = fontSize;
+        loanChartInstance.options.scales.x.ticks.font.size = fontSize;
+        
+        // Update y-axis title and ticks
+        loanChartInstance.options.scales.y.title.font.size = fontSize;
+        loanChartInstance.options.scales.y.ticks.font.size = fontSize;
+        
+        // Update y1-axis title and ticks
+        loanChartInstance.options.scales.y1.title.font.size = fontSize;
+        loanChartInstance.options.scales.y1.ticks.font.size = fontSize;
+        
+        // Update legend labels
+        loanChartInstance.options.plugins.legend.labels.font.size = fontSize;
+        
+        // Update the chart
+        loanChartInstance.update();
+    }
+}
+
+// Add event listener for window resize
+window.addEventListener('resize', updateChartOnResize);
+
 // Global variable to store the original loan's monthly payment for refinance calculations
 let originalLoanMonthlyPayment = null;
 
@@ -462,6 +491,8 @@ function createLoanChart(schedule) {
         options: {
             responsive: true,
             maintainAspectRatio: true,
+            aspectRatio: 2, // Better aspect ratio for mobile
+            resizeDelay: 100, // Delay resizing to prevent flickering
             interaction: {
                 mode: 'index',
                 intersect: false,
@@ -473,8 +504,16 @@ function createLoanChart(schedule) {
                 legend: {
                     display: true,
                     position: 'top',
+                    labels: {
+                        font: {
+                            size: window.innerWidth < 768 ? 10 : 12
+                        }
+                    }
                 },
                 tooltip: {
+                    // Improve tooltip for mobile by enabling vertical mode
+                    mode: 'index',
+                    intersect: false,
                     callbacks: {
                         label: function(context) {
                             let label = context.dataset.label || '';
@@ -494,7 +533,21 @@ function createLoanChart(schedule) {
                     stacked: true,
                     title: {
                         display: true,
-                        text: shouldAggregate ? 'Year' : 'Payment Number'
+                        text: shouldAggregate ? 'Year' : 'Payment Number',
+                        font: {
+                            size: window.innerWidth < 768 ? 10 : 12
+                        }
+                    },
+                    ticks: {
+                        // Reduce the number of labels shown on mobile
+                        autoSkip: true,
+                        maxTicksLimit: 20,
+                        // Rotate labels to prevent overlapping
+                        maxRotation: 45,
+                        minRotation: 45,
+                        font: {
+                            size: window.innerWidth < 768 ? 10 : 12
+                        }
                     },
                     grid: {
                         display: false
@@ -506,9 +559,17 @@ function createLoanChart(schedule) {
                     position: 'left',
                     title: {
                         display: true,
-                        text: `Remaining Balance (${currencyMap[currentLocale].symbol})`
+                        text: `Remaining Balance (${currencyMap[currentLocale].symbol})`,
+                        // Add padding to prevent overlap with axis labels
+                        padding: { top: 10, bottom: 10 },
+                        font: {
+                            size: window.innerWidth < 768 ? 10 : 12
+                        }
                     },
                     ticks: {
+                        font: {
+                            size: window.innerWidth < 768 ? 10 : 12
+                        },
                         callback: function(value) {
                             return value.toLocaleString(currentLocale, {
                                 style: 'currency',
@@ -528,10 +589,18 @@ function createLoanChart(schedule) {
                     position: 'right',
                     title: {
                         display: true,
-                        text: `Amount Paid (${currencyMap[currentLocale].symbol})`
+                        text: `Amount Paid (${currencyMap[currentLocale].symbol})`,
+                        // Add padding to prevent overlap with axis labels
+                        padding: { top: 10, bottom: 10 },
+                        font: {
+                            size: window.innerWidth < 768 ? 10 : 12
+                        }
                     },
                     stacked: true,
                     ticks: {
+                        font: {
+                            size: window.innerWidth < 768 ? 10 : 12
+                        },
                         callback: function(value) {
                             return value.toLocaleString(currentLocale, {
                                 style: 'currency',
