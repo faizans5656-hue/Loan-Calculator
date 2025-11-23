@@ -156,6 +156,12 @@ label {
     position: relative;
     display: flex;
     align-items: center;
+    min-height: 48px; /* Ensure minimum height for mobile */
+}
+
+.input-wrapper input[type="date"] {
+    height: 100%; /* Ensure it fills the container height */
+    box-sizing: border-box;
 }
 
 .currency-symbol,
@@ -223,6 +229,8 @@ select {
     color: var(--text-primary);
     transition: all 0.2s ease;
     font-family: inherit;
+    height: 100%; /* Ensure it fills the container height */
+    box-sizing: border-box;
 }
 
 input[type="date"]:focus,
@@ -415,6 +423,11 @@ select:hover:not(:focus) {
 
     input[type="number"] {
         font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    input[type="date"] {
+        font-size: 16px; /* Prevents zoom on iOS for date inputs */
+        min-height: 44px; /* Ensure touch targets are large enough */
     }
 
     .results-title {
